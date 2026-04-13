@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}Employees - Employee Management System{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-6">
+        <h2>Employees</h2>
+    </div>
+    <div class="col-md-6 text-end">
+        <a href="{{ url_for('main.add_employee') }}" class="btn btn-primary">
+            <i class="fas fa-user-plus"></i> Add New Employee
+        </a>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <form method="GET" class="row g-2">
+            <div class="col-md-10">
+                <input type="text" name="search" class="form-control" placeholder="Search by name or email..." value="{{ search }}">
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-outline-primary w-100">
+                    <i class="fas fa-search"></i> Search
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card">
+    <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            <thead class="table-dark">
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Position</th>
+                    <th>Department</th>
+                    <th>Salary</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if employees %}
+                    {% for employee in employees %}
+                    <tr>
+                        <td><strong>{{ employee.full_name }}</strong></td>
+                        <td>{{ employee.email }}</td>
+                        <td>{{ employee.position }}</td>
+                        <td>{{ employee.department.name }}</td>
+                        <td>${{ "%.2f"|format(employee.salary) }}</td>
+                        <td>
+                            {% if employee.status == 'Active' %}
+                                <span class="badge bg-success">{{ employee.status }}</span>
+                            {% elif employee.status == 'Inactive' %}
+                                <span class="badge bg-danger">{{ employee.status }}</span>
+                            {% else %}
+                                <span class="badge bg-warning">{{ employee.status }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{{ url_for('main.edit_employee', employee_id=employee.id) }}" class="btn btn-sm btn-warning">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <form method="POST" action="{{ url_for('main.delete_employee', employee_id=employee.id) }}" style="display:inline;">
+                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan="7" class="text-center py-4">No employees found.</td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% if pages > 1 %}
+<nav aria-label="Page navigation" class="mt-4">
+    <ul class="pagination justify-content-center">
+        {% if page > 1 %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('main.employees', page=1, search=search) }}">First</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('main.employees', page=page-1, search=search) }}">Previous</a>
+            </li>
+        {% endif %}
+        
+        {% for p in range(1, pages + 1) %}
+            {% if p == page %}
+                <li class="page-item active"><span class="page-link">{{ p }}</span></li>
+            {% else %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('main.employees', page=p, search=search) }}">{{ p }}</a>
+                </li>
+            {% endif %}
+        {% endfor %}
+        
+        {% if page < pages %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('main.employees', page=page+1, search=search) }}">Next</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('main.employees', page=pages, search=search) }}">Last</a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+{% endblock %}
