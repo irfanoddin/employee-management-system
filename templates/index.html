@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h1 class="mb-4">Dashboard</h1>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+                <h5 class="card-title">Total Employees</h5>
+                <h2>{{ total_employees }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <h5 class="card-title">Active Employees</h5>
+                <h2>{{ active_employees }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-info">
+            <div class="card-body">
+                <h5 class="card-title">Departments</h5>
+                <h2>{{ total_departments }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <a href="{{ url_for('main.add_employee') }}" class="btn btn-primary btn-block mb-2">
+                    <i class="fas fa-user-plus"></i> Add New Employee
+                </a>
+                <a href="{{ url_for('main.employees') }}" class="btn btn-info btn-block mb-2">
+                    <i class="fas fa-users"></i> View All Employees
+                </a>
+                <a href="{{ url_for('main.add_department') }}" class="btn btn-success btn-block mb-2">
+                    <i class="fas fa-building"></i> Add Department
+                </a>
+                <a href="{{ url_for('main.attendance') }}" class="btn btn-warning btn-block">
+                    <i class="fas fa-calendar-check"></i> Manage Attendance
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>System Information</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Application:</strong> Employee Management System</p>
+                <p><strong>Version:</strong> 1.0.0</p>
+                <p><strong>Framework:</strong> Flask with SQLAlchemy ORM</p>
+                <p><strong>Database:</strong> SQLite</p>
+                <p><strong>Last Updated:</strong> April 12, 2026</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
